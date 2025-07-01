@@ -2,6 +2,7 @@ package roomescape.member;
 
 import jakarta.servlet.http.Cookie;
 import org.springframework.stereotype.Service;
+import roomescape.auth.LoginMember;
 import roomescape.token.TokenParser;
 import roomescape.token.TokenProvider;
 import roomescape.token.TokenResponse;
@@ -29,13 +30,15 @@ public class MemberService {
         return new TokenResponse(token);
     }
 
-    public AuthenticatedMemberResponse parseTokenAndGetMemberInfo(Cookie[] cookies) {
+    public LoginMember parseTokenAndGetMemberInfo(Cookie[] cookies) {
 
         String token = "";
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("token"))
                 token = cookie.getValue();
         }
+
+        if (token.isEmpty()) throw new IllegalArgumentException("로그인하지 않은 사용자입니다.");
 
         return tokenParser.paseMemberInfo(token);
     }

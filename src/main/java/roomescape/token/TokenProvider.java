@@ -10,7 +10,6 @@ import roomescape.member.Member;
 import java.util.Base64;
 import java.util.Date;
 
-
 @Component
 public class TokenProvider {
 
@@ -27,6 +26,7 @@ public class TokenProvider {
                 .setSubject(Long.toString(member.getId()))
                 .claim("name", member.getName())
                 .claim("role", member.getRole())
+                .claim("email", member.getEmail())
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(

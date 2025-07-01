@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import roomescape.auth.LoginMember;
+import roomescape.auth.LoginRequest;
 import roomescape.token.TokenResponse;
 
 import java.net.URI;
@@ -36,12 +38,12 @@ public class MemberController {
     }
 
     @GetMapping("/login/check")
-    public ResponseEntity<AuthenticatedMemberResponse> loingCheck(HttpServletRequest request) {
+    public ResponseEntity<MemberResponse> loingCheck(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        AuthenticatedMemberResponse response = memberService.parseTokenAndGetMemberInfo(cookies);
+        LoginMember loginMember = memberService.parseTokenAndGetMemberInfo(cookies);
+        MemberResponse response = new MemberResponse(loginMember.getId(), loginMember.getName(), loginMember.getEmail());
         return ResponseEntity.ok().body(response);
     }
-
 
     @PostMapping("/members")
     public ResponseEntity createMember(@RequestBody MemberRequest memberRequest) {
