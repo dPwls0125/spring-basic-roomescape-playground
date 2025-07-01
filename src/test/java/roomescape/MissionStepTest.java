@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -19,7 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MissionStepTest {
 
     @Test
-    void 일단계() {
+    @DisplayName("로그인시 토큰 정상 발급 테스트")
+    void login_shouldReturnAccessToken() {
         Map<String, String> params = new HashMap<>();
         params.put("email", "admin@email.com");
         params.put("password", "password");
@@ -47,7 +49,8 @@ public class MissionStepTest {
     }
 
     @Test
-    void 이단계() {
+    @DisplayName("예약 생성시 name이 비어있으면 로그인한 회원 이름을 사용하는지 테스트")
+    void createReservation_shouldUseLoginMemberName_whenNameIsNotProvided() {
         String token = createToken("admin@email.com", "password");  // 일단계에서 토큰을 추출하는 로직을 메서드로 따로 만들어서 활용하세요.
 
         Map<String, String> params = new HashMap<>();
@@ -80,24 +83,9 @@ public class MissionStepTest {
         assertThat(adminResponse.as(ReservationResponse.class).getName()).isEqualTo("브라운");
     }
 
-    private String createToken(String email, String password) {
-        Map<String, String> params = new HashMap<>();
-        params.put("email", email);
-        params.put("password", password);
-
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(params)
-                .when().post("/login")
-                .then().log().all()
-                .statusCode(200)
-                .extract();
-
-        return response.headers().get("Set-Cookie").getValue().split(";")[0].split("=")[1];
-    }
-
     @Test
-    void 삼단계() {
+    @DisplayName("Admin 권한이 있는 사용자만 '/admin' 엔드포인트에 접근할 수 있는지 테스트")
+    void cannotAccessAdminEndpoint_whenNonAdminUser() {
         String brownToken = createToken("brown@email.com", "password");
 
         RestAssured.given().log().all()
@@ -113,6 +101,22 @@ public class MissionStepTest {
                 .get("/admin")
                 .then().log().all()
                 .statusCode(200);
+    }
+
+    private String createToken(String email, String password) {
+        Map<String, String> params = new HashMap<>();
+        params.put("email", email);
+        params.put("password", password);
+
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/login")
+                .then().log().all()
+                .statusCode(200)
+                .extract();
+
+        return response.headers().get("Set-Cookie").getValue().split(";")[0].split("=")[1];
     }
 
 
