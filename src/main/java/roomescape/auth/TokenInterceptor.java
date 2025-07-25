@@ -9,15 +9,16 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import java.util.Arrays;
 
 @Component
-public class AdminRoleCheckInterceptor implements HandlerInterceptor {
+public class TokenInterceptor implements HandlerInterceptor {
+
     private final AuthService authService;
 
-    public AdminRoleCheckInterceptor(AuthService authService) {
+    public TokenInterceptor(AuthService authService) {
         this.authService = authService;
     }
 
     @Override
-    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
 
         if (cookies == null) {
@@ -31,13 +32,8 @@ public class AdminRoleCheckInterceptor implements HandlerInterceptor {
                 .findFirst()
                 .orElse(null);
 
-        LoginMember member = authService.parseMemberInfo(token);
-
-        if (member == null || !member.getRole().equals("ADMIN")) {
-            response.setStatus(401);
-            return false;
-        }
-        return true;
+        LoginMember loginMember = authService.parseMemberInfo(token);
+        request.setAttribute("loginMember", loginMember);
+        return HandlerInterceptor.super.preHandle(request, response, handler);
     }
-
 }

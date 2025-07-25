@@ -20,7 +20,8 @@ public class ReservationService {
     }
 
     private ReservationRequest replaceNameIfEmpty(ReservationRequest request, LoginMember loginMember) {
-        if (request.getName() == null || request.getName().isBlank()) {
+        String requestName = request.getName();
+        if (requestName == null || requestName.isBlank()) {
             return new ReservationRequest(loginMember.getName(), request.getDate(), request.getTheme(), request.getTime());
         }
         return request;

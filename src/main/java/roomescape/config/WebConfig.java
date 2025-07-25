@@ -6,6 +6,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import roomescape.auth.AdminRoleCheckInterceptor;
 import roomescape.auth.LoginMemberArgumentResolver;
+import roomescape.auth.TokenInterceptor;
 
 import java.util.List;
 
@@ -14,10 +15,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final LoginMemberArgumentResolver loginMemberArgumentResolver;
     private final AdminRoleCheckInterceptor adminRoleCheckInterceptor;
+    private final TokenInterceptor tokenInterceptor;
 
-    public WebConfig(final LoginMemberArgumentResolver loginMemberArgumentResolver, final AdminRoleCheckInterceptor adminRoleCheckInterceptor) {
+    public WebConfig(LoginMemberArgumentResolver loginMemberArgumentResolver, AdminRoleCheckInterceptor adminRoleCheckInterceptor, TokenInterceptor tokenInterceptor) {
         this.loginMemberArgumentResolver = loginMemberArgumentResolver;
         this.adminRoleCheckInterceptor = adminRoleCheckInterceptor;
+        this.tokenInterceptor = tokenInterceptor;
     }
 
     @Override
@@ -29,5 +32,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(final InterceptorRegistry registry) {
         registry.addInterceptor(adminRoleCheckInterceptor)
                 .addPathPatterns("/admin/**");
+
+        registry.addInterceptor(tokenInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/", "/signup", "/signup/**", "/login", "/login/**", "/logout", "/error");
+
+
     }
 }

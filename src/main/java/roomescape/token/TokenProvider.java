@@ -26,7 +26,6 @@ public class TokenProvider {
                 .setSubject(Long.toString(member.getId()))
                 .claim("name", member.getName())
                 .claim("role", member.getRole())
-                .claim("email", member.getEmail())
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(

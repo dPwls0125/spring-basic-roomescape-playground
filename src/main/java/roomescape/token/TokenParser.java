@@ -15,7 +15,7 @@ public class TokenParser {
     @Value("${roomescape.auth.jwt.secret}")
     private String secretKey;
 
-    public LoginMember paseMemberInfo(String token) {
+    public LoginMember parseMemberInfo(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(Base64.getDecoder().decode(secretKey)))
                 .build()
@@ -28,7 +28,6 @@ public class TokenParser {
         long id = Long.parseLong(claims.getSubject());
 
         return new LoginMember(id, name, email, role);
-
 
     }
 
