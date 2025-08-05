@@ -30,20 +30,15 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
+
         registry.addInterceptor(adminRoleCheckInterceptor)
                 .addPathPatterns("/admin/**");
 
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
-                        "/",
-                        "/signup",
-                        "/signup/**",
-                        "/login",
-                        "/logout",
-                        "/error"
+                        "/", "/signup", "/signup/**", "/login", "/logout", "/error",
+                        "/css/**", "/js/**", "/images/**", "/favicon.ico", "/image/**", "/h2-console/**"
                 );
-
-
     }
 }
