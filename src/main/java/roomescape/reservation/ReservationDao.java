@@ -5,7 +5,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.theme.Theme;
-import roomescape.time.Time;
+import roomescape.time.ParticipationTime;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -32,7 +32,7 @@ public class ReservationDao {
                         rs.getLong("reservation_id"),
                         rs.getString("reservation_name"),
                         rs.getString("reservation_date"),
-                        new Time(
+                        new ParticipationTime(
                                 rs.getLong("time_id"),
                                 rs.getString("time_value")
                         ),
@@ -54,8 +54,8 @@ public class ReservationDao {
             return ps;
         }, keyHolder);
 
-        Time time = jdbcTemplate.queryForObject("SELECT * FROM time WHERE id = ?",
-                (rs, rowNum) -> new Time(rs.getLong("id"), rs.getString("time_value")),
+        ParticipationTime participationTime = jdbcTemplate.queryForObject("SELECT * FROM time WHERE id = ?",
+                (rs, rowNum) -> new ParticipationTime(rs.getLong("id"), rs.getString("time_value")),
                 reservationRequest.getTime());
 
         Theme theme = jdbcTemplate.queryForObject("SELECT * FROM theme WHERE id = ?",
@@ -66,7 +66,7 @@ public class ReservationDao {
                 keyHolder.getKey().longValue(),
                 reservationRequest.getName(),
                 reservationRequest.getDate(),
-                time,
+                participationTime,
                 theme
         );
     }
@@ -89,7 +89,7 @@ public class ReservationDao {
                         rs.getLong("reservation_id"),
                         rs.getString("reservation_name"),
                         rs.getString("reservation_date"),
-                        new Time(
+                        new ParticipationTime(
                                 rs.getLong("time_id"),
                                 rs.getString("time_value")
                         ),
@@ -114,7 +114,7 @@ public class ReservationDao {
                         rs.getLong("reservation_id"),
                         rs.getString("reservation_name"),
                         rs.getString("reservation_date"),
-                        new Time(
+                        new ParticipationTime(
                                 rs.getLong("time_id"),
                                 rs.getString("time_value")
                         ),

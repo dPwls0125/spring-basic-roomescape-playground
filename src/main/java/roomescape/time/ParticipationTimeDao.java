@@ -9,30 +9,30 @@ import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
-public class TimeDao {
+public class ParticipationTimeDao {
     private final JdbcTemplate jdbcTemplate;
 
-    public TimeDao(JdbcTemplate jdbcTemplate) {
+    public ParticipationTimeDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Time> findAll() {
+    public List<ParticipationTime> findAll() {
         return jdbcTemplate.query(
                 "SELECT * FROM time WHERE deleted = false",
-                (rs, rowNum) -> new Time(
+                (rs, rowNum) -> new ParticipationTime(
                         rs.getLong("id"),
                         rs.getString("time_value")));
     }
 
-    public Time save(Time time) {
+    public ParticipationTime save(ParticipationTime participationTime) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         this.jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO time(time_value) VALUES (?)", new String[]{"id"});
-            ps.setString(1, time.getValue());
+            ps.setString(1, participationTime.getTime());
             return ps;
         }, keyHolder);
 
-        return new Time(keyHolder.getKey().longValue(), time.getValue());
+        return new ParticipationTime(keyHolder.getKey().longValue(), participationTime.getTime());
     }
 
     public void deleteById(Long id) {

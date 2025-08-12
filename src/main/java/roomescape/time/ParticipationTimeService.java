@@ -7,38 +7,38 @@ import roomescape.reservation.ReservationDao;
 import java.util.List;
 
 @Service
-public class TimeService {
-    private TimeDao timeDao;
+public class ParticipationTimeService {
+    private ParticipationTimeDao participationTimeDao;
     private ReservationDao reservationDao;
 
-    public TimeService(TimeDao timeDao, ReservationDao reservationDao) {
-        this.timeDao = timeDao;
+    public ParticipationTimeService(ParticipationTimeDao participationTimeDao, ReservationDao reservationDao) {
+        this.participationTimeDao = participationTimeDao;
         this.reservationDao = reservationDao;
     }
 
     public List<AvailableTime> getAvailableTime(String date, Long themeId) {
         List<Reservation> reservations = reservationDao.findByDateAndThemeId(date, themeId);
-        List<Time> times = timeDao.findAll();
+        List<ParticipationTime> participationTimes = participationTimeDao.findAll();
 
-        return times.stream()
+        return participationTimes.stream()
                 .map(time -> new AvailableTime(
                         time.getId(),
-                        time.getValue(),
+                        time.getTime(),
                         reservations.stream()
                                 .anyMatch(reservation -> reservation.getTime().getId().equals(time.getId()))
                 ))
                 .toList();
     }
 
-    public List<Time> findAll() {
-        return timeDao.findAll();
+    public List<ParticipationTime> findAll() {
+        return participationTimeDao.findAll();
     }
 
-    public Time save(Time time) {
-        return timeDao.save(time);
+    public ParticipationTime save(ParticipationTime participationTime) {
+        return participationTimeDao.save(participationTime);
     }
 
     public void deleteById(Long id) {
-        timeDao.deleteById(id);
+        participationTimeDao.deleteById(id);
     }
 }
