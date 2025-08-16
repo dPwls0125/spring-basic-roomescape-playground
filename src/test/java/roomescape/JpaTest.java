@@ -30,6 +30,4 @@ public class JpaTest {
         assertThat(savedTime.isPresent()).isTrue();
         assertThat(savedTime.get().getTime()).isEqualTo(time.getTime());
     }
-
-
 }
