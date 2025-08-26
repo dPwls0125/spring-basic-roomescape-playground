@@ -16,6 +16,10 @@ public class MyReservationResponse {
         this.status = status;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getTheme() {
         return theme;
     }
