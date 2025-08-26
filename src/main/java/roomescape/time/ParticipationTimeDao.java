@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
+@Deprecated
 public class ParticipationTimeDao {
     private final JdbcTemplate jdbcTemplate;
 

@@ -6,6 +6,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Deprecated
 public class MemberDao {
     private JdbcTemplate jdbcTemplate;
 

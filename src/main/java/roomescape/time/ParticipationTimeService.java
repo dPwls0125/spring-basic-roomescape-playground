@@ -2,23 +2,26 @@ package roomescape.time;
 
 import org.springframework.stereotype.Service;
 import roomescape.reservation.Reservation;
-import roomescape.reservation.ReservationDao;
+import roomescape.reservation.ReservationRepository;
 
 import java.util.List;
 
 @Service
 public class ParticipationTimeService {
-    private ParticipationTimeDao participationTimeDao;
-    private ReservationDao reservationDao;
 
-    public ParticipationTimeService(ParticipationTimeDao participationTimeDao, ReservationDao reservationDao) {
-        this.participationTimeDao = participationTimeDao;
-        this.reservationDao = reservationDao;
+    private final ParticipationTimeRepository participationTimeRepository;
+    private final ReservationRepository reservationRepository;
+
+    public ParticipationTimeService(final ParticipationTimeRepository participationTimeRepository, final ReservationRepository reservationRepository) {
+        this.participationTimeRepository = participationTimeRepository;
+        this.reservationRepository = reservationRepository;
     }
 
+
     public List<AvailableTime> getAvailableTime(String date, Long themeId) {
-        List<Reservation> reservations = reservationDao.findByDateAndThemeId(date, themeId);
-        List<ParticipationTime> participationTimes = participationTimeDao.findAll();
+
+        List<Reservation> reservations = reservationRepository.findAllByDateAndTheme_Id(date, themeId);
+        List<ParticipationTime> participationTimes = participationTimeRepository.findAll();
 
         return participationTimes.stream()
                 .map(time -> new AvailableTime(
@@ -31,14 +34,14 @@ public class ParticipationTimeService {
     }
 
     public List<ParticipationTime> findAll() {
-        return participationTimeDao.findAll();
+        return participationTimeRepository.findAll();
     }
 
     public ParticipationTime save(ParticipationTime participationTime) {
-        return participationTimeDao.save(participationTime);
+        return participationTimeRepository.save(participationTime);
     }
 
     public void deleteById(Long id) {
-        participationTimeDao.deleteById(id);
+        participationTimeRepository.deleteById(id);
     }
 }
