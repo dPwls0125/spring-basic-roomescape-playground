@@ -10,6 +10,8 @@ import roomescape.theme.ThemeRepository;
 import roomescape.time.ParticipationTime;
 import roomescape.time.ParticipationTimeRepository;
 
+import java.util.List;
+
 
 @Service
 public class WaitingService {
@@ -40,7 +42,16 @@ public class WaitingService {
         );
 
         waiting = waitingRepository.save(waiting);
-        return new WaitingResponse(waiting.getId(), waiting.getTheme().getName(), waiting.getDate(), waiting.getTime().getTime());
+        List<WaitingWithRank> waitingsWithRank = waitingRepository.findWaitingsWithRankByMemberId(member.getId());
+
+        Long rank = -1L;
+        for (WaitingWithRank w : waitingsWithRank) {
+            if (w.getWaiting().getId().equals(waiting.getId())) {
+                rank = w.getRank();
+                break;
+            }
+        }
+        return new WaitingResponse(waiting.getId(), rank);
     }
 
 }

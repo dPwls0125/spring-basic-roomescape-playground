@@ -75,6 +75,7 @@ public class ReservationService {
         reservations.forEach(
                 reservation -> myReservationResponses.add(
                         new MyReservationResponse(
+                                reservation.getId(),
                                 reservation.getTheme().getName(),
                                 reservation.getDate(),
                                 reservation.getTime().getTime(),
@@ -88,6 +89,7 @@ public class ReservationService {
                     Waiting waiting = waitingWithRank.getWaiting();
                     myReservationResponses.add(
                             new MyReservationResponse(
+                                    waiting.getId(),
                                     waiting.getTheme().getName(),
                                     waiting.getDate(),
                                     waiting.getTime().getTime(),
