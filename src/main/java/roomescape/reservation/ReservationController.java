@@ -21,7 +21,7 @@ public class ReservationController {
         return reservationService.findAll();
     }
 
-    @GetMapping("/reservations-mine")
+    @GetMapping("/reservations/mine")
     public List<MyReservationResponse> myReservations(LoginMember loginMember) {
         return reservationService.findMyReservation(loginMember);
     }

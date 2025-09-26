@@ -20,7 +20,7 @@ public class ParticipationTimeService {
 
     public List<AvailableTime> getAvailableTime(String date, Long themeId) {
 
-        List<Reservation> reservations = reservationRepository.findAllByDateAndTheme_Id(date, themeId);
+        List<Reservation> reservations = reservationRepository.findAllByDateAndThemeId(date, themeId);
         List<ParticipationTime> participationTimes = participationTimeRepository.findAll();
 
         return participationTimes.stream()

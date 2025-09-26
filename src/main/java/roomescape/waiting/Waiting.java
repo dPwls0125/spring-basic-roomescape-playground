@@ -10,10 +10,13 @@ public class Waiting {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "waiting_id", nullable = false)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Column(nullable = false)
     private String date;
     @JoinColumn(name = "time_id")
     @ManyToOne

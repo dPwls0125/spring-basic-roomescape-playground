@@ -6,7 +6,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Deprecated
 public class MemberDao {
     private JdbcTemplate jdbcTemplate;
 
@@ -38,19 +37,6 @@ public class MemberDao {
                         Role.valueOf(rs.getString("role"))
                 ),
                 email, password
-        );
-    }
-
-    public Member findByName(String name) {
-        return jdbcTemplate.queryForObject(
-                "SELECT id, name, email, role FROM member WHERE name = ?",
-                (rs, rowNum) -> new Member(
-                        rs.getLong("id"),
-                        rs.getString("name"),
-                        rs.getString("email"),
-                        Role.valueOf(rs.getString("role"))
-                ),
-                name
         );
     }
 }

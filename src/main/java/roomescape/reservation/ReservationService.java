@@ -71,7 +71,6 @@ public class ReservationService {
         List<WaitingWithRank> waitings = waitingRepository.findWaitingsWithRankByMemberId(loginMembmer.getId());
 
         List<MyReservationResponse> myReservationResponses = new ArrayList<>();
-        // (String theme, String date, String time, String status)
         reservations.forEach(
                 reservation -> myReservationResponses.add(
                         new MyReservationResponse(
